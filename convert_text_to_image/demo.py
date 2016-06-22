@@ -1,10 +1,11 @@
 # coding: utf-8
 # only support python2
 import Image, ImageFont, ImageDraw
-
+import os
 
 FONT = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
+print "make sure the file your want to convert in the same path."
 filename = raw_input("input the filename you want to convert: ")
 
 with open(filename) as f:
@@ -16,7 +17,8 @@ for line in lines:
     inputfile += uni_line
 
 font = ImageFont.truetype(FONT, 16)
-output = 'demo.png'
+
+output = filename.split('.')[0] + '.png'
 
 def text2png(inputfile, output, fontpath=None,
              fontsize=16, color='#000', bgcolor='#FFF',
@@ -27,13 +29,11 @@ def text2png(inputfile, output, fontpath=None,
     else:
         font = ImageFont.truetype(FONT, fontsize)
 
-
     # set up footnotes
     foot_note = 'created by Python via PIL'
     fontfoot_note = ImageFont.truetype(FONT, 18)
     foot_note_width = fontfoot_note.getsize(foot_note)[0]
     foot_note_height= fontfoot_note.getsize(foot_note)[1]
-
 
 
     # image line length
@@ -109,5 +109,5 @@ def process_text(text, fixed_size):
 
     return lines
 
-
-text2png(inputfile, output, FONT)
+if __name__ == "__main__":
+    text2png(inputfile, output, FONT)
