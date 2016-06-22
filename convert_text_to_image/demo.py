@@ -4,14 +4,17 @@ import Image, ImageFont, ImageDraw
 
 
 FONT = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
-# inputfile = u'welcome to free lancer web site, www.freelancer.com'
+
+filename = raw_input("input the filename you want to convert: ")
+
+with open(filename) as f:
+    lines = f.readlines()
 
 inputfile = u""
-with open('demo.txt') as f:
-    lines = f.readlines()
 for line in lines:
-    inputfile += line
-print inputfile
+    uni_line = unicode(line,"utf-8")
+    inputfile += uni_line
+
 font = ImageFont.truetype(FONT, 16)
 output = 'demo.png'
 
@@ -31,40 +34,16 @@ def text2png(inputfile, output, fontpath=None,
     foot_note_width = fontfoot_note.getsize(foot_note)[0]
     foot_note_height= fontfoot_note.getsize(foot_note)[1]
 
-    lines = []
-    line = u""
+
 
     # image line length
     fixed_size = out_put_width - leftpadding - rightpadding
     # image width
     img_width = out_put_width
 
-    REPLACE = u'\uFFFD'
-    NEWLINE_REPLACEMENT = ' ' + REPLACE + ' '
-    # replace the LF, or they will be ignored during the spilt
-    text = inputfile.replace('\n', NEWLINE_REPLACEMENT)
+    text = inputfile
 
-    for word in text.split():
-        # if meet LF
-        if word == REPLACE:
-            # add to list as  a new output line,slice the beginning ' '
-            lines.append(line[1:])
-            line = u""
-            lines.append(line)
-        # current line + a space + a single word <= image line length
-        elif font.getsize(line + ' ' + word)[0] <= fixed_size:
-            # line growth
-            line += ' ' + word
-        # if not LF and > fixed width
-        else:
-            # also add to list as a new output line, slice the beginning ' '
-            lines.append(line[1:])
-            line = u""
-            line += ' ' + word
-
-    # if still something left behind:
-    if len(line) != 0:
-        lines.append(line[1:])
+    lines = process_text(text, fixed_size)
 
     line_height = font.getsize(text)[1]
     img_height = line_height * (len(lines) + 3)
@@ -82,6 +61,53 @@ def text2png(inputfile, output, fontpath=None,
                foot_note,color, font)
 
     img.save(output)
+
+
+def process_text(text, fixed_size):
+    # state flag
+    in_word = False
+    lines = []
+    line = u""
+    word = u""
+    for char in text:
+        if font.getsize(line+word)[0] <= fixed_size:
+            if char != '\n':
+                if char == ' ':
+                    in_word = False
+                    line += word
+                    word = u""
+                    # join space
+                    line += char
+
+                else:
+                    in_word = True
+                    word += char
+            # meet LF
+            else:
+                in_word = False
+                line += word
+                word = u""
+                lines.append(line)
+                line = u""
+        # > fixed_size should append
+        else:
+            # last char was space or LF
+            if in_word == False:
+                # word can be add to line
+                line += word
+                # replace word with new char
+                word = char
+                lines.append(line)
+                line = u""
+
+            # last char was not space or LF
+            else:
+                # add char to current word and keep it
+                word += char
+                lines.append(line)
+                line = u""
+
+    return lines
 
 
 text2png(inputfile, output, FONT)

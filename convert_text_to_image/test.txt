@@ -1,0 +1,29 @@
+System requirements:
+
+    512MB RAM (1GB recommended for a comfortable usage).
+    9GB of disk space (20GB recommended).
+    Graphics card capable of 800×600 resolution (1024×768 recommended).
+    DVD drive or USB port.
+
+Notes:
+
+    The 64-bit ISO can boot with BIOS or UEFI.
+    The 32-bit ISO can only boot with BIOS.
+    The 64-bit ISO is recommend for all modern computers (Almost all computers sold in the last 10 years are equipped with 64-bit processors).
+
+Upgrade instructions:
+
+    This BETA release might contain critical bugs, please only use it for testing purposes and to help the Linux Mint team fix issues prior to the stable release.
+    It will be possible to upgrade from this BETA to the stable release.
+    It will also be possible to upgrade from Linux Mint 17.3. Upgrade instructions will be published next month after the stable release of Linux Mint 18.
+
+Bug reports:
+
+    Please report bugs below in the comment section of this blog.
+    When reporting bugs, please be as accurate as possible and include any information that might help developers reproduce the issue or understand the cause of the issue:
+        Bugs we can reproduce, or which cause we understand are usually fixed very easily.
+        It is important to mention whether a bug happens “always”, or “sometimes”, and what triggers it.
+        If a bug happens but didn’t happen before, or doesn’t happen in another distribution, or doesn’t happen in a different environment, please mention it and try to pinpoint the differences at play.
+        If we can’t reproduce a particular bug and we don’t understand its cause, it’s unlikely we’ll be able to fix it.
+    Please visit https://github.com/linuxmint/Roadmap to follow the progress of the development team between the BETA and the stable release.
+
