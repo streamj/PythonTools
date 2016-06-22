@@ -35,12 +35,10 @@ def text2png(inputfile, output, fontpath=None,
     foot_note_width = fontfoot_note.getsize(foot_note)[0]
     foot_note_height= fontfoot_note.getsize(foot_note)[1]
 
-
     # image line length
     fixed_size = out_put_width - leftpadding - rightpadding
     # image width
     img_width = out_put_width
-
     text = inputfile
 
     lines = process_text(text, fixed_size)
@@ -56,10 +54,8 @@ def text2png(inputfile, output, fontpath=None,
     for line in lines:
         draw.text( (leftpadding, y), line, color, font=font )
         y += line_height
-
     draw.text( (img_width - foot_note_width, img_height - foot_note_height),
                foot_note,color, font)
-
     img.save(output)
 
 
@@ -78,7 +74,6 @@ def process_text(text, fixed_size):
                     word = u""
                     # join space
                     line += char
-
                 else:
                     in_word = True
                     word += char
@@ -99,14 +94,12 @@ def process_text(text, fixed_size):
                 word = char
                 lines.append(line)
                 line = u""
-
             # last char was not space or LF
             else:
                 # add char to current word and keep it
                 word += char
                 lines.append(line)
                 line = u""
-
     return lines
 
 if __name__ == "__main__":
