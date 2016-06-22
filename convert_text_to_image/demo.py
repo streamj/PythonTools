@@ -1,5 +1,6 @@
 # coding: utf-8
 # only support python2
+# TODO support Chinese...
 import Image, ImageFont, ImageDraw
 import os
 
@@ -15,6 +16,8 @@ inputfile = u""
 for line in lines:
     uni_line = unicode(line,"utf-8")
     inputfile += uni_line
+
+print inputfile
 
 font = ImageFont.truetype(FONT, 16)
 
@@ -42,7 +45,7 @@ def text2png(inputfile, output, fontpath=None,
     text = inputfile
 
     lines = process_text(text, fixed_size)
-
+    print lines
     line_height = font.getsize(text)[1]
     img_height = line_height * (len(lines) + 3)
 
