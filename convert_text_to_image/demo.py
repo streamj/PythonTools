@@ -1,6 +1,6 @@
 # coding: utf-8
 # only support python2
-# TODO support Chinese...
+# author: stream
 #import uniout # support list output chinese, sudo pip install uniout
 import Image, ImageFont, ImageDraw
 import sys
@@ -9,9 +9,9 @@ sys.setdefaultencoding('utf-8')
 
 FONT = "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf"
 
-# print "make sure the file your want to convert in the same path."
-# filename = raw_input("input the filename you want to convert: ")
-filename = 'chinese.txt'
+print "notice: make sure the file your want to convert in the same path."
+filename = raw_input("input the filename you want to convert: ")
+
 with open(filename) as f:
     lines = f.readlines()
 
@@ -20,16 +20,13 @@ for line in lines:
     uni_line = unicode(line,"utf-8")
     inputfile += uni_line
 
-print inputfile
-
 font = ImageFont.truetype(FONT, 16)
 
-# output = filename.split('.')[0] + '.png'
-output = 'chinese.png'
+output = filename.split('.')[0] + '.png'
 
 def text2png(inputfile, output, fontpath=None,
              fontsize=16, color='#000', bgcolor='#FFF',
-             leftpadding=5, rightpadding=5, out_put_width=350):
+             leftpadding=5, rightpadding=5, out_put_width=400):
     # set up fonts
     if fontpath == None:
         font = ImageFont.load_default()
@@ -37,7 +34,7 @@ def text2png(inputfile, output, fontpath=None,
         font = ImageFont.truetype(FONT, fontsize)
 
     # set up footnotes
-    foot_note = 'created by Python via PIL'
+    foot_note = 'created by stream via Python PIL'
     fontfoot_note = ImageFont.truetype(FONT, 18)
     foot_note_width = fontfoot_note.getsize(foot_note)[0]
     foot_note_height= fontfoot_note.getsize(foot_note)[1]
@@ -49,9 +46,11 @@ def text2png(inputfile, output, fontpath=None,
     text = inputfile
 
     lines = process_text(text, fixed_size)
-    for line in lines:
-        # print  str(line).decode('string_escape')
-        print line
+
+    # for line in lines:
+    #     # print  str(line).decode('string_escape')
+    #     print i,'line is: ',line
+    #     i += 1
 
     line_height = font.getsize(text)[1]
     img_height = line_height * (len(lines) + 3)
@@ -67,6 +66,7 @@ def text2png(inputfile, output, fontpath=None,
     draw.text( (img_width - foot_note_width, img_height - foot_note_height),
                foot_note,color, font)
     img.save(output)
+    print "Mission Complete..."
 
 
 def process_text(text, fixed_size):
@@ -75,12 +75,10 @@ def process_text(text, fixed_size):
     lines = []
     line = u""
     word = u""
+    chinese_char_padding = font.getsize('贝')[0]
+
     for char in text:
-        print char
-        print 'line is:', line
-        print 'lines is:', lines
         num = ord(char.decode('utf-8'))
-        print num
         if num < 128:
             lines, line, word, in_word = parse_ascii(char,
                                                      fixed_size,
@@ -89,17 +87,21 @@ def process_text(text, fixed_size):
                                                      word,
                                                      in_word)
         else:
-            lines, line = parse_chinese(char, fixed_size, lines, line)
+            # if set in_word False, must add word to line and reset word
+            in_word = False
+            line += word
+            word = u""
+            lines, line = parse_chinese(char,
+                                        fixed_size,
+                                        lines,
+                                        line,
+                                        chinese_char_padding)
 
     return lines
 
-def parse_chinese(char, fixed_size, lines, line):
-    if font.getsize(line)[0] <= fixed_size:
-        if char != '\n':
-            line += char
-        else:
-            lines.append(line)
-            line = u""
+def parse_chinese(char, fixed_size, lines, line, chinese_char_padding):
+    if font.getsize(line)[0] <= fixed_size - chinese_char_padding/2:
+        line += char
     else:
         lines.append(line)
         line = char
